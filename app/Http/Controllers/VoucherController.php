@@ -37,16 +37,10 @@ class VoucherController extends Controller
             "created_by" => Auth::user()->id,
         ]);
 
-        $messageOne = "Um novo voucher foi publicado!";
-
-        if ($voucherType == "VIP") {
-            $messageOne = "Novo voucher VIP 7 dias foi publicado!";
-        }
-
         $this->rconService->sendGlobalNotification(
             Auth::user()->username,
             "voucher",
-            $messageOne,
+            "Um novo voucher foi publicado!",
         );
         $this->rconService->sendGlobalNotification(
             Auth::user()->username,
