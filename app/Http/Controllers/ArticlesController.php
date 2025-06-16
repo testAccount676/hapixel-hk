@@ -44,7 +44,8 @@ class ArticlesController extends Controller
     {
         $article = DB::table('articles')->where('id', $id)->first();
 
-        if (!$article) return response()->json(['message' => 'Notícia não encontrada'], 404);
+        if (!$article)
+            return response()->json(['message' => 'Notícia não encontrada'], 404);
 
         DB::table('articles')->where('id', $id)->delete();
 
@@ -63,11 +64,11 @@ class ArticlesController extends Controller
             'short_story' => ['required', 'string', 'max:255'],
             'category' => ['required', Rule::in(['General', 'Updates', 'Activity', 'Promotion'])],
             'long_story' => ['required', 'string'],
-            'image' => ['required', 'image', 'max:2048'],
+            'image' => ['required', 'string', 'max:2048'],
         ]);
 
-        $file = $request->file('image');
-        $path = $file->store('articles', 'public');
+        // $file = $request->file('image');
+        // $path = $file->store('articles', 'public');
 
         DB::table('articles')->insert([
             'author_id' => Auth::id(),
@@ -75,9 +76,9 @@ class ArticlesController extends Controller
             'short_story' => $request->short_story,
             'long_story' => $request->long_story,
             'category' => $request->category,
-            'image' => $path,
+            'image' => $request->image,
         ]);
 
-        return redirect()->back();
+        return to_route('articles.index')->with('message','Notíia criada com sucesso!');
     }
 }

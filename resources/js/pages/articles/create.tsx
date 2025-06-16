@@ -26,42 +26,31 @@ interface CreateArticleFormProps {
   short_story: string;
   long_story: string;
   category: string;
-  image: File | null;
+  image: string | null;
 
   [key: string]: string | File | null;
 }
 
 export default function CreateArticle() {
   const editorRef = useRef<any>(null);
-  const { processing, data, post, setData, errors } = useForm<CreateArticleFormProps>({
+  const { processing, data, post, setData, errors, reset } = useForm<CreateArticleFormProps>({
     title: "",
     short_story: "",
-    long_story: "",
+    long_story: "<p>O criador dessa notícia é preguiçoso.</p>",
     category: "",
     image: null,
   });
 
   function handleCreateArticle(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const editorContent = editorRef.current?.getContent();
-    setData("long_story", editorContent);
+
     console.log(data);
     post("/articles", {
-      onSuccess: () => toast.success("Notícia criada com sucesso!", {}),
+      onSuccess: () => {
+        reset();
+        toast.success("Notícia criada com sucesso!", {});
+      },
     });
-  }
-
-  function handleImage(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    const allowedMimeTypes = ["image/png", "image/jpg", "image/jpeg", "image/gif"];
-
-    if (!file) return;
-    if (!allowedMimeTypes.includes(file.type)) {
-      alert("Tipo de arquivo não permitido");
-      return;
-    }
-
-    setData("image", file);
   }
 
   return (
@@ -127,11 +116,11 @@ export default function CreateArticle() {
                 <div className="mt-4">
                   <Label htmlFor="content">Conteúdo</Label>
                   <Editor
+                    onEditorChange={(content) => setData("long_story", content)}
                     onInit={(_evt, editor) => (editorRef.current = editor)}
-                    initialValue="<p>Hmmm... O que irei escrever hoje?</p>"
                     apiKey={TINY_API_KEY}
-                    toolbar="image"
-                    plugins={"image"}
+                    toolbar="undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist | image link | code"
+                    plugins={"image link code lists table media autosave"}
                     init={{
                       height: 400,
                     }}
@@ -140,10 +129,27 @@ export default function CreateArticle() {
                 </div>
 
                 <div className="mt-4">
-                  <Label htmlFor="image">Selecionar imagem</Label>
-                  <Input type="file" id="image" onChange={handleImage} />
+                  <Label htmlFor="image">URL da Imagem</Label>
+                  <Input
+                    type="text"
+                    id="image"
+                    onChange={(e) => {
+                      const allowedExtensions = [".png", ".jpg", ".gif", ".jpeg"];
+
+                      const url = e.target.value;
+
+                      const urlIsValid = allowedExtensions.some((ext) => url.toLowerCase().endsWith(ext));
+
+                      if (!urlIsValid) {
+                        toast.error("Tipo de imagem não permitida");
+                        return;
+                      }
+
+                      setData("image", e.target.value);
+                    }}
+                  />
                   <InputError message={""} />
-                  {data.image && <img src={URL.createObjectURL(data.image)} alt="Preview" className="mt-2 w-32 rounded-lg object-cover" />}
+                  {data.image && <img src={data.image} alt="Preview" className="mt-2 w-32 rounded-lg object-cover" />}
                 </div>
 
                 <div className="mt-4 text-end">
@@ -151,7 +157,7 @@ export default function CreateArticle() {
                     size={"lg"}
                     className="flex cursor-pointer items-center gap-1 bg-emerald-600 text-white transition-all duration-300 hover:bg-emerald-500"
                     type="submit"
-                    disabled={false}
+                    disabled={processing}
                   >
                     {processing && <Loader2 className="animate-spin" />}
                     <span>Criar notícia</span> <PlusCircle />

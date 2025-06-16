@@ -6,7 +6,7 @@ export function Footer() {
           <div>
             <span>
               &copy; All rights reserved, Hapixel Team. Powered by{" "}
-              <a href="#" className="underline duration-200 hover:text-blue-500">
+              <a href="#" className="duration-200 hover:text-blue-500">
                 Whyvern Server
               </a>
             </span>
@@ -15,7 +15,7 @@ export function Footer() {
           <div>
             <p className="flex items-center">
               Developed by{" "}
-              <a href="#" className="underline duration-200 hover:text-blue-500">
+              <a href="#" className="duration-200 hover:text-blue-500">
                 &nbsp;Matthew&nbsp;
               </a>{" "}
               | Server Status: <div className="ml-1 h-3 w-3 animate-pulse rounded-full bg-emerald-500 duration-500 hover:bg-emerald-400"></div>

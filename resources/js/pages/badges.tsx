@@ -40,16 +40,16 @@ type BadgeManagementProps = {
 };
 
 export default function BadgesManagementPage({ badges }: BadgeManagementProps) {
-   const handleUserSearch = useRef(
-      debounce((query: string) => {
-        router.get("/badges", { search: query }, { preserveState: true, replace: true });
-      }, 500),
-    ).current;
-  
-    const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      handleUserSearch(value);
-    };
+  const handleUserSearch = useRef(
+    debounce((query: string) => {
+      router.get("/badges", { search: query }, { preserveState: true, replace: true });
+    }, 500),
+  ).current;
+
+  const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    handleUserSearch(value);
+  };
 
   return (
     <AppLayout>

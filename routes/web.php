@@ -11,6 +11,7 @@ use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Users\UsersController;
+use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\WordFilterController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -52,9 +53,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::prefix('badges')->group(function () {
-       Route::get('/', BadgesController::class)->name('badges.index');
+        Route::get('/', BadgesController::class)->name('badges.index');
     });
-        
+
 
     Route::prefix('articles')->group(function () {
         Route::get('/', [ArticlesController::class, 'index'])->name('articles.index');
@@ -84,10 +85,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/items/create', [CatalogItemsController::class, 'store'])->name('catalog.items.create');
     });
 
+    Route::prefix('vouchers')->group(function () {
+        Route::get('/', VoucherController::class)->name('vouchers.index');
+        Route::post('/', [VoucherController::class, 'store'])->name('vouchers.store');
+        Route::delete('/{id}', [VoucherController::class, 'destroy'])->name('vouchers.destroy');
+    });
+
     Route::prefix('rcon')->group(function () {
         Route::post('/reload-catalog', [RconController::class, 'reloadCatalog'])->name('rcon.reload-catalog');
         Route::post('/ban-user', [RconController::class, 'banUserIp'])->name('rcon.ban-user');
-    });
+        Route::post('/notification', [RconController::class, 'sendGlobalNotification'])->name('rcon.notification');
+    })->middleware('admin');
 
     Route::prefix('users')->group(function () {
         Route::get('/{id}', [UsersController::class, 'getUsernameById'])->name('users.getUsernameById');

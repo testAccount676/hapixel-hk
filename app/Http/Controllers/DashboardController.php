@@ -12,7 +12,8 @@ class DashboardController extends Controller
     /**
      * Show the dashboard root page.
      */
-    public function index(Request $request): Response {
+    public function index(Request $request): Response
+    {
 
         return Inertia::render('dashboard', [
             'roomsCount' => DB::table('rooms')->count(),

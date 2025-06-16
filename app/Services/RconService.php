@@ -4,11 +4,13 @@ namespace App\Services;
 
 use Socket;
 
-class RconService {
+class RconService
+{
     protected Socket $socket;
     protected bool $connected;
 
-    public function sendRconMessage($key, $data) {
+    public function sendRconMessage($key, $data)
+    {
         if (!$this->connect()) {
             return false;
         }
@@ -24,17 +26,28 @@ class RconService {
         return json_decode($response);
     }
 
-    public function sendCatalogUpdate($userId) {
+    public function sendCatalogUpdate($userId)
+    {
         return $this->sendRconMessage('reloadcatalog', [
             'user_id' => $userId
         ]);
     }
 
-    public function banUserIp($username, $bannerId, $bannerUsername) {
+    public function banUserIp($username, $bannerId, $bannerUsername)
+    {
         return $this->sendRconMessage('ipban', [
             'username' => $username,
             'bannerId' => $bannerId,
             'bannerUsername' => $bannerUsername,
+        ]);
+    }
+
+    public function sendGlobalNotification($user, $image, $message)
+    {
+        return $this->sendRconMessage('notification', [
+            'user' => $user,
+            'image' => $image,
+            'message' => $message,
         ]);
     }
 

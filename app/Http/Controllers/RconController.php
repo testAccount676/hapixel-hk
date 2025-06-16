@@ -29,12 +29,22 @@ class RconController extends Controller
         $this->rcon->banUserIp($username, $bannerId, $bannerUsername);
     }
 
+    public function sendGlobalNotification(Request $request)
+    {
+        $user = $request->input('user');
+        $image = $request->input('image') | "voucher";
+        $message = $request->input('message');
+
+        $this->rcon->sendGlobalNotification($user, $image, $message);
+    }
+
     public function sendPacket(Request $request): void
     {
         $key = $request->input('key');
         $data = $request->input('data');
 
-        if (!$key | !$data) return;
+        if (!$key | !$data)
+            return;
 
         $this->rcon->sendRconMessage($key, $data);
     }

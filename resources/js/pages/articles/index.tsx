@@ -104,7 +104,7 @@ export default function ArticlesIndex(props: { articles: ArticlePaginationProps 
                           <TableCell>{article.id}</TableCell>
                           <TableCell className="h-[40px] w-[20px] overflow-hidden">
                             <img
-                              src={`${article.image ? `/storage/${article.image}` : ""}`}
+                              src={article.image!!}
                               alt={article.title}
                               className="h-full w-full cursor-pointer rounded object-cover transition-transform hover:scale-105"
                             />

@@ -14,6 +14,7 @@ import { ChevronRight, LayoutGrid, NotebookText, ShoppingCart, User2Icon } from 
 import { GiStarMedal } from "react-icons/gi";
 import { GrArticle } from "react-icons/gr";
 import { ImEyeBlocked } from "react-icons/im";
+import { IoTicket } from "react-icons/io5";
 
 export function NavMain() {
   const page = usePage();
@@ -48,6 +49,14 @@ export function NavMain() {
               <Link href={"/word-filter"} prefetch>
                 <ImEyeBlocked />
                 <span>Filtro de Palavras</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem key={"Vouchers"}>
+            <SidebarMenuButton asChild isActive={"/vouchers" === page.url} tooltip={{ children: "Vouchs" }}>
+              <Link href={"/vouchers"} prefetch>
+                <IoTicket />
+                <span>Vouchers</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

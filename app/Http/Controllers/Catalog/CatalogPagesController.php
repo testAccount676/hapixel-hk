@@ -40,7 +40,8 @@ class CatalogPagesController extends Controller
     {
         $catalogPage = DB::table('catalog_pages')->where('id', $id)->first();
 
-        if (!$catalogPage) return response()->json(['message' => 'Página não encontrada'], 404);
+        if (!$catalogPage)
+            return response()->json(['message' => 'Página não encontrada'], 404);
 
         DB::table('catalog_pages')->where('id', $id)->delete();
 
